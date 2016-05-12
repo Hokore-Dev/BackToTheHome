@@ -38,13 +38,10 @@
     <ClInclude Include="..\Classes\GameScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Macro.h">
+    <ClInclude Include="..\Classes\Character.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Macro.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Character.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

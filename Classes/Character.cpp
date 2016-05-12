@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Config.h"
 USING_NS_CC;
 
 Character::Character() : charge(true)
@@ -50,9 +51,7 @@ void Character::initAnimation()
 
 bool Character::rotateCharacter()
 {
-	chargeBar->setScaleX(0);
-	chargeBarBack->runAction(FadeIn::create(0.2f));
-
+	if (!charge) return false;
 	switch (direction)
 	{
 	case LEFT:	direction = DOWN;  break;
@@ -62,6 +61,9 @@ bool Character::rotateCharacter()
 	default:
 		break;
 	}
+	charge = false;
+	chargeBar->setScaleX(0);
+	chargeBarBack->runAction(FadeIn::create(0.2f));
 
 	return true;
 }
@@ -70,29 +72,20 @@ void Character::update(float delta)
 {
 	if (chargeBar->getScaleX() < 1)
 	{
-		chargeBar->setScaleX(chargeBar->getScaleX() + 0.05f);
-		charge = false;
+		chargeBar->setScaleX(chargeBar->getScaleX() + BALL_CHARGEBAR_INCREASE_VALUE);
+		if (chargeBar->getScaleX() >= 1)
+		{
+			chargeBar->setScaleX(1);
+			charge = true;
+			chargeBarBack->runAction(FadeOut::create(0.2f));
+		}
 	}
-	else
-	{
-
-	}
-
 	switch (direction)
 	{
-	case LEFT:
-		setPositionX(getPositionX() - 2);
-		break;
-	case RIGHT:
-		setPositionX(getPositionX() + 2);
-		break;
-	case DOWN:
-		setPositionY(getPositionY() - 2);
-		break;
-	case UP:
-		setPositionY(getPositionY() + 2);
-		break;
-	default:
-		break;
+	case LEFT:setPositionX(getPositionX() - BALL_SPEED); break;
+	case RIGHT:setPositionX(getPositionX() + BALL_SPEED); break;
+	case DOWN:setPositionY(getPositionY() - BALL_SPEED); break;
+	case UP:setPositionY(getPositionY() + BALL_SPEED); break;
+	default:break;
 	}
 }

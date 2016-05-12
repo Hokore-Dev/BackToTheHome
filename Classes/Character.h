@@ -13,6 +13,7 @@ public:
 	bool init(DIRECTION direction_);
 	CREATE_FUNC_ARGS(Character);
 
+	bool isCharge()			 const { return charge; }
 	bool isAnimation()		 const { return animation; }
 	DIRECTION getDirection() const { return direction; }
 private:

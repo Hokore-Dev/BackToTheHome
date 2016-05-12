@@ -107,8 +107,8 @@ void GameScene::update(float delta)
 	ballCreateDelta += delta;
 	levelDelta		+= delta;
 
-	levelBallCount = level * 3;
-	if (ballCreateDelta > 1.0f)
+	levelBallCount = level * LEVEL_BALL_RANGE;
+	if (ballCreateDelta > BALL_CREATE_TIME)
 	{
 		ballCreateDelta = 0;
 		if (characters->size() < levelBallCount)
@@ -136,12 +136,11 @@ void GameScene::onTouchesBegan(const std::vector<Touch*> &touches, Event* unused
 	Vec2 touch = touches[0]->getLocation();
 	for (Character* v : *characters)
 	{
-		if (v->getBoundingBox().containsPoint(touch))
+		if (v->getBoundingBox().containsPoint(touch) && v->isCharge())
 		{
 			targetCharacter = v;
 			arrow->stopAllActions();
 			arrow->runAction(FadeIn::create(0.1f));
-
 			switch (v->getDirection())
 			{
 			case LEFT:arrow->setRotation(90); break;
@@ -166,7 +165,7 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 	Vec2 touch = touches[0]->getLocation();
 	for (Character* v : *characters)
 	{
-		if (v->getBoundingBox().containsPoint(touch))
+		if (v->getBoundingBox().containsPoint(touch) && v->isCharge())
 		{
 			v->rotateCharacter();
 		}
