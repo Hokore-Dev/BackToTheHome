@@ -2,7 +2,9 @@
 #define __GAME_SCENE_H__
 
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
 
+using CocosDenshion::SimpleAudioEngine;
 class Character;
 class GameScene : public cocos2d::Layer
 {
@@ -20,6 +22,7 @@ public:
 	virtual void onTouchesEnded(const std::vector<cocos2d::Touch*> &touches, cocos2d::Event* unused_event) override;
 
 private:
+	void initAnimation();
 	void dataInitailize();
 	void gameResultShow();
 
@@ -36,6 +39,7 @@ private:
 	cocos2d::Sprite * ranking;
 	cocos2d::Sprite * share;
 	cocos2d::Sprite * moneyUp;
+	cocos2d::ParticleSystemQuad * backEffect;
 
 	Character* targetCharacter;
 	std::vector<Character*> *characters;
@@ -46,7 +50,6 @@ private:
 	int		levelBallCount;
 	int		level;
 	int		score;
-	int		userMoney;
 	bool	gameover;
 };
 

@@ -18,6 +18,9 @@ public:
 	bool isAnimation()		 const { return animation; }
 	DIRECTION getDirection() const { return direction; }
 
+	void setChoose(bool choose_) { choose = choose_; }
+	bool getChoose() const { return choose; }
+
 private:
 	void initAnimation();
 	void update(float delta) override;
@@ -28,6 +31,7 @@ private:
 	cocos2d::Sprite* chargeBar;
 
 	bool animation;
+	bool choose;
 	bool charge;
 	bool money;
 };

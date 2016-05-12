@@ -2,7 +2,7 @@
 #include "Config.h"
 USING_NS_CC;
 
-Character::Character() : charge(true), money(false)
+Character::Character() : charge(true), money(false), choose(false)
 {
 }
 
@@ -18,7 +18,7 @@ bool Character::init(DIRECTION direction_)
 		money = true;
 	}
 	if (!initWithFile(money ? "Texture/money.png" :
-		StringUtils::format("Texture/box/box_%d.png",cocos2d::random(0,2)).c_str()))
+		StringUtils::format("Texture/box/%d.png",cocos2d::random(0,2)).c_str()))
 	{
 		return false;
 	}
