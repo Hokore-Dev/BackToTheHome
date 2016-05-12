@@ -11,16 +11,29 @@ Scene* GameScene::createScene()
     return scene;
 }
 
-GameScene::GameScene() : ballCreateDelta(0), levelBallCount(0),
-level(1), levelDelta(0), score(0), targetCharacter(nullptr)
+GameScene::GameScene()
 {
-
+	/// TODO : CHANGE
+	userMoney = 0;
 }
 
 GameScene::~GameScene()
 {
 	characters->clear();
+	moneyItems->clear();
+	delete moneyItems;
 	delete characters;
+}
+
+void GameScene::dataInitailize()
+{
+	ballCreateDelta = 0;
+	levelBallCount = 0;
+	level = 1;
+	levelDelta = 0;
+	score = 0;
+	targetCharacter = nullptr;
+	gameover = false;
 }
 
 bool GameScene::init()
@@ -29,15 +42,23 @@ bool GameScene::init()
 	{
 		return false;
 	}
+	dataInitailize();
 	characters = new std::vector<Character*>;
+	moneyItems = new std::vector<Sprite*>;
 
 	size = Director::getInstance()->getWinSize();
 
 	auto background = Sprite::create("Texture/background.png");
+	background->setRotation(180);
 	background->setPosition(size.width / 2, size.height / 2);
 	this->addChild(background);
 
+	auto backEffect = ParticleSystemQuad::create("Texture/BackEffect.plist");
+	backEffect->setPosition(size.width / 2, size.height / 2 - 100);
+	this->addChild(backEffect, 5);
+
 	crashRect = Sprite::create("Texture/crashBox.png");
+	crashRect->setVisible(false);
 	crashRect->setPosition(size.width / 2, size.height / 2);
 	this->addChild(crashRect);
 
@@ -51,15 +72,78 @@ bool GameScene::init()
 	this->addChild(home, 5);
 
 	lbScore = Label::create("0","fonts/calibri.ttf" , 140);
-	lbScore->setColor(Color3B::BLACK);
-	lbScore->setPosition(size.width / 2, size.height - size.height / 5);
+	lbScore->setColor(Color3B::WHITE);
+	lbScore->setPosition(size.width / 2, size.height - size.height / 6);
 	this->addChild(lbScore,5);
+
+	moneyIcon = Sprite::create("Texture/money.png");
+	moneyIcon->setPosition(size.width - 60, size.height - 70);
+	this->addChild(moneyIcon,5);
+
+	lbUserMoney = Label::create("16", "fonts/calibri.ttf", 70);
+	lbUserMoney->setColor(Color3B::WHITE);
+	lbUserMoney->setAnchorPoint(Vec2(1, 0.5));
+	lbUserMoney->setPosition(size.width - 95, size.height - 82);
+	this->addChild(lbUserMoney, 5);
+
+	bestScore = Label::create("Best Score", "fonts/calibri.ttf", 80);
+	bestScore->setColor(Color3B::WHITE);
+	bestScore->setPosition(size.width / 2, size.height - size.height / 6 - 150);
+	bestScore->setOpacity(0);
+	this->addChild(bestScore, 5);
+
+	clearMessage = Sprite::create("Texture/clearMessage.png");
+	clearMessage->setPosition(size.width / 2, size.height / 6 + 30 );
+	clearMessage->setOpacity(0);
+	this->addChild(clearMessage,5);
+
+	ranking = Sprite::create("Texture/ranking.png");
+	ranking->setPosition(size.width / 2 + 160, (size.height / 6) - 100);
+	ranking->setOpacity(0);
+	this->addChild(ranking, 5);
+
+	share = Sprite::create("Texture/share.png");
+	share->setPosition(size.width / 2, (size.height / 6) - 100);
+	share->setOpacity(0);
+	this->addChild(share, 5);
+
+	moneyUp = Sprite::create("Texture/moneyup.png");
+	moneyUp->setPosition(size.width / 2 - 160, (size.height / 6) - 100);
+	moneyUp->setOpacity(0);
+	this->addChild(moneyUp, 5);
 
 	this->setTouchEnabled(true);
 	this->setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
 
 	scheduleUpdate();
     return true;
+}
+
+void GameScene::gameResultShow()
+{
+	gameover = true;
+	home->runAction(EaseExponentialOut::create(RotateTo::create(0.5f, 0)));
+	clearMessage->runAction(
+		Sequence::create(DelayTime::create(0.2f),
+		Spawn::create(FadeIn::create(0.5f),
+		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr),nullptr));
+	ranking->runAction(
+		Sequence::create(DelayTime::create(0.2f),
+		Spawn::create(FadeIn::create(0.5f),
+		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr), nullptr));
+
+	share->runAction(
+		Sequence::create(DelayTime::create(0.2f),
+		Spawn::create(FadeIn::create(0.5f),
+		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr), nullptr));
+
+	moneyUp->runAction(
+		Sequence::create(DelayTime::create(0.2f),
+		Spawn::create(FadeIn::create(0.5f),
+		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr), nullptr));
+
+	bestScore->runAction(Spawn::create(FadeIn::create(0.5f),
+		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr));
 }
 
 void GameScene::update(float delta)
@@ -81,12 +165,17 @@ void GameScene::update(float delta)
 			(*itr)->removeFromParent();
 			characters->erase(itr);
 			levelBallCount--;
-			// TODO : GAME OVER
+			unscheduleUpdate();
+			gameResultShow();
 			break;
 		}
 		// CHECK HOME
 		if (crashRect->getBoundingBox().intersectsRect((*itr)->getBoundingBox()))
 		{
+			auto particle = ParticleSystemQuad::create("Texture/crashEffect.plist");
+			particle->setPosition((*itr)->getPosition());
+			this->addChild(particle,5);
+
 			if (targetCharacter == (*itr))
 				targetCharacter = nullptr;
 			(*itr)->removeFromParent();
@@ -113,7 +202,19 @@ void GameScene::update(float delta)
 		ballCreateDelta = 0;
 		if (characters->size() < levelBallCount)
 		{
-			Character* character = Character::create((DIRECTION)cocos2d::random(0, 3));
+			DIRECTION randomDir = (DIRECTION)cocos2d::random(0, 3);
+			int rotateValue = 0;
+			switch (randomDir)
+			{
+			case LEFT: rotateValue = 90; break;
+			case RIGHT: rotateValue = 270; break;
+			case DOWN: rotateValue = 0;break;
+			case UP:rotateValue = 180;break;
+			default:
+				break;
+			}
+			home->runAction(EaseExponentialOut::create(RotateTo::create(0.5f, rotateValue)));
+			Character* character = Character::create(randomDir);
 			character->setPosition(size.width / 2, size.height / 2);
 			this->addChild(character);
 			characters->push_back(character);
@@ -169,5 +270,35 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 		{
 			v->rotateCharacter();
 		}
+	}
+
+	if (gameover)
+	{
+		for (Character* v : *characters)
+		{
+			v->removeFromParentAndCleanup(true);
+		}
+		lbScore->setString("0");
+		characters->clear();
+		dataInitailize();
+		scheduleUpdate();
+		clearMessage->runAction(Sequence::create(DelayTime::create(0.2f),
+			Spawn::create(FadeOut::create(0.5f),
+			EaseSineOut::create(MoveBy::create(0.5f,Vec2(0,-50))),nullptr),nullptr));
+		bestScore->runAction(Spawn::create(FadeOut::create(0.5f),
+			EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, -50))), nullptr));
+		ranking->runAction(
+			Sequence::create(DelayTime::create(0.2f),
+			Spawn::create(FadeOut::create(0.5f),
+			EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, -50))), nullptr), nullptr));
+		share->runAction(
+			Sequence::create(DelayTime::create(0.2f),
+			Spawn::create(FadeOut::create(0.5f),
+			EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, -50))), nullptr), nullptr));
+		moneyUp->runAction(
+			Sequence::create(DelayTime::create(0.2f),
+			Spawn::create(FadeOut::create(0.5f),
+			EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, -50))), nullptr), nullptr));
+
 	}
 }

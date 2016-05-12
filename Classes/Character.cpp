@@ -18,6 +18,7 @@ bool Character::init(DIRECTION direction_)
 		return false;
 	}
 	this->direction = direction_;
+	this->setOpacity(180);
 	initAnimation();
 
 	chargeBarBack = Sprite::create("Texture/loadbox.png");
