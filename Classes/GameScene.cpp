@@ -80,7 +80,7 @@ bool GameScene::init()
 	moneyIcon->setPosition(size.width - 60, size.height - 70);
 	this->addChild(moneyIcon,5);
 
-	lbUserMoney = Label::create("16", "fonts/calibri.ttf", 70);
+	lbUserMoney = Label::create("0", "fonts/calibri.ttf", 70);
 	lbUserMoney->setColor(Color3B::WHITE);
 	lbUserMoney->setAnchorPoint(Vec2(1, 0.5));
 	lbUserMoney->setPosition(size.width - 95, size.height - 82);
@@ -176,6 +176,11 @@ void GameScene::update(float delta)
 			particle->setPosition((*itr)->getPosition());
 			this->addChild(particle,5);
 
+			if ((*itr)->isMoney())
+			{
+				userMoney++;
+				lbUserMoney->setString(StringUtils::toString(userMoney));
+			}
 			if (targetCharacter == (*itr))
 				targetCharacter = nullptr;
 			(*itr)->removeFromParent();
