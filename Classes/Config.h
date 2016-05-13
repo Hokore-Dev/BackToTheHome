@@ -15,7 +15,7 @@ static std::string getHideItemString(std::string itemName)
 	if (itemName == "box") return "box";
 	if (itemName == "circle") return "XirXXe";
 	if (itemName == "star") return "XtXX";
-	if (itemName == "man") return "MXX";
+	if (itemName == "man") return "mXX";
 	if (itemName == "butterfly") return "XXttXrXXy";
 	if (itemName == "cart") return "XXrt";
 	if (itemName == "woman") return "wXoXan";

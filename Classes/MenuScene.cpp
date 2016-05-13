@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "Config.h"
 #include "InventoryLayer.h"
+#include "GameSharing.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "platform\android\jni\JniHelper.h"
@@ -121,6 +122,7 @@ bool MenuScene::init()
 	ranking = MenuItemImage::create("Texture/ranking.png",
 		"Texture/ranking.png", std::bind([&]{
 		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
+		GameSharing::ShowLeaderboards(0);
 	}));
 	ranking->setPosition(size.width / 2 + 200, size.height / 2 - 500 - 500);
 	menu->addChild(ranking);

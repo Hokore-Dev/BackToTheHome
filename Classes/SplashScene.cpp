@@ -34,12 +34,11 @@ bool SplashScene::init()
 	SimpleAudioEngine::getInstance()->playBackgroundMusic("Sound/main.mp3", true);
 
 	auto logo = Sprite::create("Texture/logo.png");
-	logo->setOpacity(0);
 	logo->setAnchorPoint(Vec2(0, 0));
 	this->addChild(logo);
 
 	logo->runAction(Sequence::create(
-		FadeIn::create(1.0f),
+		DelayTime::create(0.5f),
 		CallFunc::create(std::bind([&]{
 		Director::getInstance()->replaceScene(TransitionFade::create(1.0f, MenuScene::createScene()));
 	})),nullptr));

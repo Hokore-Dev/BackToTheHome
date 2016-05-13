@@ -44,8 +44,8 @@ import com.google.android.gms.games.leaderboard.LeaderboardVariant;
 import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.unity3d.ads.android.IUnityAdsListener;
 import com.unity3d.ads.android.UnityAds;
-import com.lettuce.backtothehome.*;
 
+import android.R;
 import android.content.Intent;
 import android.graphics.Region;
 import android.net.Uri;
@@ -193,7 +193,8 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 		super.onCreate(savedInstanceState);
 		_self = this;
 		
-		String leaderboardIdsRaw = getString(R.string.leaderboard);
+		// 되나 모르겠네
+		String leaderboardIdsRaw = "CgkI6cvA3ZgPEAIQAA";
         
         leaderboardIDs = leaderboardIdsRaw.split(";");
 		

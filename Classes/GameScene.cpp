@@ -3,6 +3,7 @@
 #include "MenuScene.h"
 #include "UserData.h"
 #include "Config.h"
+#include "GameSharing.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "platform\android\jni\JniHelper.h"
 #endif
@@ -87,7 +88,7 @@ bool GameScene::init()
 	moneyIcon->setPosition(size.width - 60, size.height - 70);
 	this->addChild(moneyIcon,5);
 
-	lbUserMoney = Label::create("0", "fonts/calibri.ttf", 70);
+	lbUserMoney = Label::create(StringUtils::toString(UserData::getInstance()->getMoney()), "fonts/calibri.ttf", 70);
 	lbUserMoney->setColor(Color3B::WHITE);
 	lbUserMoney->setOpacity(0);
 	lbUserMoney->setAnchorPoint(Vec2(1, 0.5));
@@ -111,12 +112,12 @@ bool GameScene::init()
 	this->addChild(ranking, 5);
 
 	share = Sprite::create("Texture/share.png");
-	share->setPosition(size.width / 2, (size.height / 6) - 100);
+	share->setPosition(size.width / 2 - 160, (size.height / 6) - 100);
 	share->setOpacity(0);
 	this->addChild(share, 5);
 
 	moneyUp = Sprite::create("Texture/moneyup.png");
-	moneyUp->setPosition(size.width / 2 - 160, (size.height / 6) - 100);
+	moneyUp->setPosition(size.width / 2, (size.height / 6) - 100);
 	moneyUp->setOpacity(0);
 	this->addChild(moneyUp, 5);
 
@@ -130,10 +131,12 @@ bool GameScene::init()
 
 void GameScene::gameResultShow()
 {
+	GameSharing::SubmitScore(score, 0);
 	if (UserData::getInstance()->getBestScore() < score)
 	{
 		UserData::getInstance()->setBestScore(score);
 		UserDefault::getInstance()->setIntegerForKey("BestScore", score);
+
 	}
 	bestScore->setString(StringUtils::format("Best Score : %d", UserData::getInstance()->getBestScore()));
 
@@ -153,6 +156,14 @@ void GameScene::gameResultShow()
 		Spawn::create(FadeIn::create(0.5f),
 		EaseSineOut::create(MoveBy::create(0.5f, Vec2(0, 50))), nullptr), nullptr));
 
+	if (cocos2d::random(0, 10) < 5)
+	{
+		moneyUp->setVisible(true);
+	}
+	else
+	{
+		moneyUp->setVisible(false);
+	}
 	moneyUp->runAction(
 		Sequence::create(DelayTime::create(0.2f),
 		Spawn::create(FadeIn::create(0.5f),
@@ -311,16 +322,18 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 		}
 	}
 
+	bool check = false;
 	if (gameover)
 	{
-		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 		// TODO : Add API
 		if (ranking->getBoundingBox().containsPoint(touch))
 		{
-			
+			SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
+			GameSharing::ShowLeaderboards(0);
 		}
 		else if (share->getBoundingBox().containsPoint(touch))
 		{
+			SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 			JniMethodInfo t;
 			if (JniHelper::getStaticMethodInfo(t,
@@ -332,21 +345,40 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 			}
 #endif
 		}
-		else if (moneyUp->getBoundingBox().containsPoint(touch))
+		else if (moneyUp->getBoundingBox().containsPoint(touch) && moneyUp->isVisible())
 		{
+			SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 			JniMethodInfo t;
 			if (JniHelper::getStaticMethodInfo(t,
 				"org/cocos2dx/cpp/AppActivity",
-				"unityAdsPlay",
-				"()V"))
+				"unityAdsShowConfirm",
+				"()Z"))
 			{
-				t.env->CallStaticVoidMethod(t.classID, t.methodID);
+				check = t.env->CallStaticBooleanMethod(t.classID, t.methodID);
 			}
 #endif
+			if (check)
+			{
+				moneyUp->setVisible(false);
+				UserData::getInstance()->setMoney(UserData::getInstance()->getMoney() + cocos2d::random(3, 6));
+				UserDefault::getInstance()->setIntegerForKey("Money",UserData::getInstance()->getMoney());
+				lbUserMoney->setString(StringUtils::toString(UserData::getInstance()->getMoney()));
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+				JniMethodInfo t;
+				if (JniHelper::getStaticMethodInfo(t,
+					"org/cocos2dx/cpp/AppActivity",
+					"unityAdsPlay",
+					"()V"))
+				{
+					t.env->CallStaticVoidMethod(t.classID, t.methodID);
+				}
+#endif
+			}
 		}
 		else
 		{
+			SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 			UserData::getInstance()->setMoney(UserData::getInstance()->getMoney());
 			UserDefault::getInstance()->setIntegerForKey("Money", UserData::getInstance()->getMoney());
 

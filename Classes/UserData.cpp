@@ -31,14 +31,14 @@ void UserData::init()
 void UserData::CharacterDataInit()
 {
 	UserDefault::getInstance()->setBoolForKey("box", true);
-	UserDefault::getInstance()->setBoolForKey("circle", true);
-	UserDefault::getInstance()->setBoolForKey("star", true);
-	UserDefault::getInstance()->setBoolForKey("man", true);
-	UserDefault::getInstance()->setBoolForKey("butterfly", true);
-	UserDefault::getInstance()->setBoolForKey("cart", true);
-	UserDefault::getInstance()->setBoolForKey("woman", true);
-	UserDefault::getInstance()->setBoolForKey("question", true);
-	UserDefault::getInstance()->setBoolForKey("moon", true);
+	UserDefault::getInstance()->setBoolForKey("circle", false);
+	UserDefault::getInstance()->setBoolForKey("star", false);
+	UserDefault::getInstance()->setBoolForKey("man", false);
+	UserDefault::getInstance()->setBoolForKey("butterfly", false);
+	UserDefault::getInstance()->setBoolForKey("cart", false);
+	UserDefault::getInstance()->setBoolForKey("woman", false);
+	UserDefault::getInstance()->setBoolForKey("question", false);
+	UserDefault::getInstance()->setBoolForKey("moon", false);
 	UserDefault::getInstance()->setBoolForKey("car", false);
 	UserDefault::getInstance()->setStringForKey("selectCharacter", "box");
 

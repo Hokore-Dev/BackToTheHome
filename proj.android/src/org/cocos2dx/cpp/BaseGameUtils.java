@@ -54,7 +54,8 @@ public class BaseGameUtils {
         } else {
             // not resolvable... so show an error message
             int errorCode = result.getErrorCode();
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(errorCode,
+            @SuppressWarnings("deprecation")
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(errorCode,
                     activity, requestCode);
             if (dialog != null) {
                 dialog.show();
@@ -111,7 +112,8 @@ public class BaseGameUtils {
      * @param actResp the response code from onActivityResult.
      * @param errorDescription the resource id of a String for a generic error message.
      */
-    public static void showActivityResultError(Activity activity, int requestCode, int actResp, int errorDescription) {
+    @SuppressWarnings("deprecation")
+	public static void showActivityResultError(Activity activity, int requestCode, int actResp, int errorDescription) {
         if (activity == null) {
             Log.e("BaseGameUtils", "*** No Activity. Can't show failure dialog!");
             return;
@@ -121,20 +123,21 @@ public class BaseGameUtils {
         switch (actResp) {
             case GamesActivityResultCodes.RESULT_APP_MISCONFIGURED:
                 errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.app_misconfigured));
+                        "The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.");
                 break;
             case GamesActivityResultCodes.RESULT_SIGN_IN_FAILED:
                 errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.sign_in_failed));
+                        "Failed to sign in. Please check your network connection and try again.");
                 break;
             case GamesActivityResultCodes.RESULT_LICENSE_FAILED:
                 errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.license_failed));
+                        "License check failed.");
                 break;
             default:
                 // No meaningful Activity response code, so generate default Google
                 // Play services dialog
-                final int errorCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+                @SuppressWarnings("deprecation")
+				final int errorCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
                 errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode,
                         activity, requestCode, null);
                 if (errorDialog == null) {

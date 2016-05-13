@@ -6,5 +6,5 @@ Save this file as res/values/games-ids.xml in your project.
 <resources>
   <string name="app_id">522034619881</string>
   <string name="package_name">com.lettuce.backtothehome</string>
-  <string name="leaderboard">CgkI6cvA3ZgPEAIQAA </string>
+  <string name="leaderboard">CgkI6cvA3ZgPEAIQAA</string>
 </resources>
