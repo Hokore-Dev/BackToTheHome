@@ -3,6 +3,9 @@
 #include "MenuScene.h"
 #include "UserData.h"
 #include "Config.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform\android\jni\JniHelper.h"
+#endif
 USING_NS_CC;
 
 Scene* GameScene::createScene()
@@ -314,15 +317,33 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 		// TODO : Add API
 		if (ranking->getBoundingBox().containsPoint(touch))
 		{
-
+			
 		}
 		else if (share->getBoundingBox().containsPoint(touch))
 		{
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			JniMethodInfo t;
+			if (JniHelper::getStaticMethodInfo(t,
+				"org/cocos2dx/cpp/AppActivity",
+				"facebookShare",
+				"(I)V"))
+			{
+				t.env->CallStaticVoidMethod(t.classID, t.methodID,score);
+			}
+#endif
 		}
 		else if (moneyUp->getBoundingBox().containsPoint(touch))
 		{
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			JniMethodInfo t;
+			if (JniHelper::getStaticMethodInfo(t,
+				"org/cocos2dx/cpp/AppActivity",
+				"unityAdsPlay",
+				"()V"))
+			{
+				t.env->CallStaticVoidMethod(t.classID, t.methodID);
+			}
+#endif
 		}
 		else
 		{

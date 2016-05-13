@@ -386,7 +386,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/MenuScene.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../ui/UIScale9Sprite.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../ui/UIEditBox/UIEditBox.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../ui/UILayoutComponent.h \
- jni/../../Classes/Macro.h
+ jni/../../Classes/Macro.h \
+ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform\android\jni\JniHelper.h
 
 jni/../../Classes/MenuScene.h:
 
@@ -1169,3 +1170,5 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../ui/UIEditBox/U
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../ui/UILayoutComponent.h:
 
 jni/../../Classes/Macro.h:
+
+C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform\android\jni\JniHelper.h:

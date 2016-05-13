@@ -351,7 +351,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/GameScene.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/audio/android/../include/Export.h \
  jni/../../Classes/Character.h jni/../../Classes/Macro.h \
  jni/../../Classes/MenuScene.h jni/../../Classes/UserData.h \
- jni/../../Classes/Singleton.h jni/../../Classes/Config.h
+ jni/../../Classes/Singleton.h jni/../../Classes/Config.h \
+ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform\android\jni\JniHelper.h
 
 jni/../../Classes/GameScene.h:
 
@@ -1064,3 +1065,5 @@ jni/../../Classes/UserData.h:
 jni/../../Classes/Singleton.h:
 
 jni/../../Classes/Config.h:
+
+C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform\android\jni\JniHelper.h:

@@ -3,6 +3,10 @@
 #include "GameScene.h"
 #include "Config.h"
 #include "InventoryLayer.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform\android\jni\JniHelper.h"
+#endif
 USING_NS_CC;
 
 MenuScene::MenuScene()
@@ -28,6 +32,17 @@ bool MenuScene::init()
 	{
 		return false;
 	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t,
+		"org/cocos2dx/cpp/AppActivity",
+		"unityAdsInit",
+		"()V"))
+	{
+		t.env->CallStaticVoidMethod(t.classID, t.methodID);
+	}
+#endif
 
 	UserData::getInstance()->setBackgroundCount(cocos2d::random(0, MAP_COUNT - 1));
 
