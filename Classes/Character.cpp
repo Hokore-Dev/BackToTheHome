@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Config.h"
+#include "UserData.h"
 USING_NS_CC;
 
 Character::Character() : charge(true), money(false), choose(false)
@@ -18,11 +19,14 @@ bool Character::init(DIRECTION direction_)
 		money = true;
 	}
 	if (!initWithFile(money ? "Texture/money.png" :
-		StringUtils::format("Texture/box/%d.png",cocos2d::random(0,2)).c_str()))
+		StringUtils::format("Texture/%s/%d.png",
+		UserData::getInstance()->getSelectCharacter().c_str(),
+		cocos2d::random(0,2)).c_str()))
 	{
 		return false;
 	}
-	if (money) this->setScale(1.3f);
+	if (money) this->setScale(1.6f);
+	else this->setScale(1.5f);
 
 	this->direction = direction_;
 	this->setOpacity(180);
@@ -46,11 +50,11 @@ void Character::initAnimation()
 {
 	this->animation = true;
 	Vec2 reachPosition = Vec2::ZERO;
-	if (direction == LEFT || direction == RIGHT) reachPosition = Vec2(-100 + direction * 200,0);
-	else if (direction == DOWN || direction == UP) reachPosition = Vec2(0,-100 + (direction-2) * 200);
+	if (direction == LEFT || direction == RIGHT) reachPosition = Vec2(-120 + direction * 240,0);
+	else if (direction == DOWN || direction == UP) reachPosition = Vec2(0,-120 + (direction-2) * 240);
 
 	this->runAction(Sequence::create(
-		EaseSineOut::create(MoveBy::create(0.5f, reachPosition)),
+		EaseSineOut::create(MoveBy::create(0.5, reachPosition)),
 		CallFunc::create(std::bind([&]{
 		scheduleUpdate();
 		this->animation = false;

@@ -127,6 +127,13 @@ bool GameScene::init()
 
 void GameScene::gameResultShow()
 {
+	if (UserData::getInstance()->getBestScore() < score)
+	{
+		UserData::getInstance()->setBestScore(score);
+		UserDefault::getInstance()->setIntegerForKey("BestScore", score);
+	}
+	bestScore->setString(StringUtils::format("Best Score : %d", UserData::getInstance()->getBestScore()));
+
 	unscheduleUpdate();
 	home->runAction(EaseExponentialOut::create(RotateTo::create(0.5f, 0)));
 	clearMessage->runAction(
@@ -319,6 +326,9 @@ void GameScene::onTouchesEnded(const std::vector<Touch*> &touches, Event* unused
 		}
 		else
 		{
+			UserData::getInstance()->setMoney(UserData::getInstance()->getMoney());
+			UserDefault::getInstance()->setIntegerForKey("Money", UserData::getInstance()->getMoney());
+
 			this->runAction(Sequence::create(
 				DelayTime::create(1.0f),
 				CallFunc::create(std::bind([&]{

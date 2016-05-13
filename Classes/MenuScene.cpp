@@ -2,6 +2,7 @@
 #include "UserData.h"
 #include "GameScene.h"
 #include "Config.h"
+#include "InventoryLayer.h"
 USING_NS_CC;
 
 MenuScene::MenuScene()
@@ -59,6 +60,7 @@ bool MenuScene::init()
 
 	sound = MenuItemImage::create("Texture/sound.png",
 		"Texture/sound.png", std::bind([&]{
+		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 		UserData::getInstance()->setSound(!UserData::getInstance()->getSound());
 		if (UserData::getInstance()->getSound())
 		{
@@ -94,12 +96,17 @@ bool MenuScene::init()
 	}
 
 	store = MenuItemImage::create("Texture/store.png",
-		"Texture/store.png", CC_CALLBACK_1(MenuScene::transGameScene, this));
+		"Texture/store.png", std::bind([&]{
+		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
+		this->addChild(InventoryLayer::create());
+	}));
 	store->setPosition(size.width / 2, size.height / 2 - 500 - 500);
 	menu->addChild(store);
 
 	ranking = MenuItemImage::create("Texture/ranking.png",
-		"Texture/ranking.png", CC_CALLBACK_1(MenuScene::transGameScene, this));
+		"Texture/ranking.png", std::bind([&]{
+		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
+	}));
 	ranking->setPosition(size.width / 2 + 200, size.height / 2 - 500 - 500);
 	menu->addChild(ranking);
 
@@ -117,9 +124,32 @@ bool MenuScene::init()
 	lbUserMoney->setAnchorPoint(Vec2(1, 0.5));
 	lbUserMoney->setPosition(size.width - 95, size.height - 82);
 	this->addChild(lbUserMoney, 5);
+	this->setKeypadEnabled(true);                 
+
+	exitMessage = Sprite::create("Texture/exitMessage.png");
+	exitMessage->setOpacity(0);
+	exitMessage->setPosition(size.width / 2, 300);
+	this->addChild(exitMessage,5);
 
 	initAnimation();
 	return true;
+}
+
+void MenuScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode,
+	cocos2d::Event * event)
+{
+	if (keycode == EventKeyboard::KeyCode::KEY_BACK){
+		if (exitMessage->getOpacity() == 0)
+		{
+			exitMessage->runAction(Sequence::create(
+				FadeIn::create(1.0f),
+				FadeOut::create(1.0f), nullptr));
+		}
+		else
+		{
+			Director::getInstance()->end();
+		}
+	}
 }
 
 void MenuScene::initAnimation()

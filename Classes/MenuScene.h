@@ -14,7 +14,7 @@ public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(MenuScene);
-
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 	
 private:
 	void initAnimation();
@@ -31,6 +31,7 @@ private:
 	cocos2d::MenuItemImage* ranking;
 
 	cocos2d::Sprite * moneyIcon;
+	cocos2d::Sprite * exitMessage;
 	cocos2d::Label  * lbUserMoney;
 };
 

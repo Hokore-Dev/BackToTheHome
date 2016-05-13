@@ -30,6 +30,7 @@ bool SplashScene::init()
 	{
 		return false;
 	}
+	UserData::getInstance()->init();
 	SimpleAudioEngine::getInstance()->playBackgroundMusic("Sound/main.mp3", true);
 
 	auto logo = Sprite::create("Texture/logo.png");

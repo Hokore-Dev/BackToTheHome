@@ -17,3 +17,4 @@ if (pRet && pRet->init(args ...)) \
 	  return nullptr; \
 	  } \
 	  }
+
