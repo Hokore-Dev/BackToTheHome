@@ -37,8 +37,14 @@ import com.facebook.share.Sharer;
 import com.facebook.share.Sharer.Result;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.leaderboard.LeaderboardVariant;
+import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.unity3d.ads.android.IUnityAdsListener;
 import com.unity3d.ads.android.UnityAds;
+import com.lettuce.backtothehome.*;
 
 import android.content.Intent;
 import android.graphics.Region;
@@ -47,6 +53,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /**
  * 
@@ -55,7 +63,7 @@ import android.util.Log;
  * @version 0.01
  * @see static method JNI CALL Twitter 까지 하고 코드 정리
  */
-public class AppActivity extends Cocos2dxActivity implements IUnityAdsListener {
+public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 
 	private final static String NAVERAPPID = "naver.com.cafesample";
 	private final static String NAVERCAFE_URL = "sangmowarrior";
@@ -65,9 +73,129 @@ public class AppActivity extends Cocos2dxActivity implements IUnityAdsListener {
 	private static AppActivity _self = null;
 	private static ShareDialog shareDialog;
 
+	// 구글플레
+	static int currentID;
+	static int currentAchievementID;
+	static boolean gpgAvailable;
+
+	static String[] leaderboardIDs;
+	static String[] achievementIDs;
+
+	protected static int currentScore;
+
+	public static native void callCppCallback();
+
+	@Override
+	public void onSignInSucceeded() {
+		Log.d("GPGS", "로그인완료 ");
+		gpgAvailable = true;
+	}
+
+	@Override
+	public void onSignInFailed() {
+		Log.d("GPGS", "로그인실패 ");
+		gpgAvailable = false;
+	}
+	/*@brief Changes the actvie leaderboard
+    @param The index of the leaderboard
+  */
+  static public void openLeaderboard(int leaderboardID){
+  	Log.d("GPGS", "들오냐 ");
+       currentID = leaderboardID;
+       Log.d("GPGS", "들온다 ");
+  }
+  
+  /*@brief This function opens the leaderboards ui for an leaderboard id*/
+  static public void openLeaderboardUI(){
+      if(gpgAvailable){
+              ((AppActivity)_self).runOnUiThread(new Runnable() {
+          public void run() {
+              ((AppActivity)_self).startActivityForResult(Games.Leaderboards.getLeaderboardIntent(((AppActivity)_self).getGameHelper().getApiClient(), leaderboardIDs[currentID]),2);
+          }
+              });
+      }
+  }
+  
+  static public boolean isGPGSupported(){
+      return gpgAvailable;
+  }
+  
+  /*@brief Submits a score to the leaderboard that is currently actvie*/
+  static public void submitScoreToLeaderboard(int score)
+  {
+      if(gpgAvailable){
+      Games.Leaderboards.submitScore(((AppActivity)_self).getGameHelper().getApiClient(),leaderboardIDs[currentID],score);
+      }
+  }
+  
+  static public void requestScoreFromLeaderboard()
+  {
+      if(gpgAvailable){
+          Games.Leaderboards.loadCurrentPlayerLeaderboardScore(((AppActivity)_self).getGameHelper().getApiClient(), leaderboardIDs[currentID], LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC).setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+              @Override
+              public void onResult(final Leaderboards.LoadPlayerScoreResult scoreResult) {
+                  if (scoreResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_OK) {
+                      AppActivity.currentScore = (int)scoreResult.getScore().getRawScore();
+                      AppActivity.callCppCallback();
+                  }
+              }
+          });
+      }
+  }
+
+  static public int collectScore()
+  {
+      return AppActivity.currentScore;
+  }
+  
+   /*@brief Shows the achievements ui*/
+  static public void showAchievements() {
+      if(gpgAvailable){
+      ((AppActivity)_self).runOnUiThread(new Runnable() {
+          public void run() {
+              ((AppActivity)_self).startActivityForResult(Games.Achievements.getAchievementsIntent(((AppActivity)_self).getGameHelper().getApiClient()), 5);
+          }
+      });
+      }
+  }
+  
+  /*@brief Changes the actvie Achievement
+    @param The index of the achievement in the list*/
+  static public void openAchievement(int achievementID){
+      currentAchievementID = achievementID;
+  }
+  
+  static public void updateAchievement(int percentage){
+      if(gpgAvailable){
+     Games.Achievements.unlock(((AppActivity)_self).getGameHelper().getApiClient(), achievementIDs[currentAchievementID]);
+      }
+  }
+  @Override
+	public boolean onCreateOptionsMenu (Menu menu) {
+		//inflater.inflate(R.layout.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected (MenuItem item) {
+		return true;
+	}
+  
+  static public void exitGame()
+  {
+      Intent intent = new Intent(_self, MainActivity.class);
+      MainActivity.exiting=true;
+      _self.startActivity(intent);
+  }
+  
+		    
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		_self = this;
+		
+		String leaderboardIdsRaw = getString(R.string.leaderboard);
+        
+        leaderboardIDs = leaderboardIdsRaw.split(";");
 		
 		// Facebook Initalize
 		FacebookSdk.sdkInitialize(getApplicationContext());
