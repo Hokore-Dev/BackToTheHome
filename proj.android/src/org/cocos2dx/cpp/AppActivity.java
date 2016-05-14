@@ -7,6 +7,8 @@
 ****************************************************************************/
 package org.cocos2dx.cpp;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,9 @@ import com.facebook.share.Sharer;
 import com.facebook.share.Sharer.Result;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
@@ -46,170 +51,99 @@ import com.unity3d.ads.android.IUnityAdsListener;
 import com.unity3d.ads.android.UnityAds;
 
 import android.R;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Region;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * 
  * @author haminjun
  * @since 2016.04.28
  * @version 0.01
- * @see static method JNI CALL Twitter ±Ó¡ˆ «œ∞Ì ƒ⁄µÂ ¡§∏Æ
+ * @see static method JNI CALL Twitter ÍπåÏßÄ ÌïòÍ≥† ÏΩîÎìú Ï†ïÎ¶¨
  */
 public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 
+	// -----------------------------------------------------
 	private final static String NAVERAPPID = "naver.com.cafesample";
 	private final static String NAVERCAFE_URL = "sangmowarrior";
 	private final static String UNITYADS_ID = "1069367";
-
 	private static CallbackManager callbackManager;
 	private static AppActivity _self = null;
 	private static ShareDialog shareDialog;
-
-	// ±∏±€«√∑π
 	static int currentID;
 	static int currentAchievementID;
 	static boolean gpgAvailable;
-
 	static String[] leaderboardIDs;
-	static String[] achievementIDs;
-
 	protected static int currentScore;
 
 	public static native void callCppCallback();
 
-	@Override
-	public void onSignInSucceeded() {
-		Log.d("GPGS", "∑Œ±◊¿Œøœ∑· ");
-		gpgAvailable = true;
-	}
+	// -----------------------------------------------------
+	private static AppActivity _appActiviy;
+	private AdView adView;
+	private static final String AD_UNIT_ID = "ca-app-pub-3798516121036315/7737995786";
 
-	@Override
-	public void onSignInFailed() {
-		Log.d("GPGS", "∑Œ±◊¿ŒΩ«∆– ");
-		gpgAvailable = false;
-	}
-	/*@brief Changes the actvie leaderboard
-    @param The index of the leaderboard
-  */
-  static public void openLeaderboard(int leaderboardID){
-  	Log.d("GPGS", "µÈø¿≥ƒ ");
-       currentID = leaderboardID;
-       Log.d("GPGS", "µÈø¬¥Ÿ ");
-  }
-  
-  /*@brief This function opens the leaderboards ui for an leaderboard id*/
-  static public void openLeaderboardUI(){
-      if(gpgAvailable){
-              ((AppActivity)_self).runOnUiThread(new Runnable() {
-          public void run() {
-              ((AppActivity)_self).startActivityForResult(Games.Leaderboards.getLeaderboardIntent(((AppActivity)_self).getGameHelper().getApiClient(), leaderboardIDs[currentID]),2);
-          }
-              });
-      }
-  }
-  
-  static public boolean isGPGSupported(){
-      return gpgAvailable;
-  }
-  
-  /*@brief Submits a score to the leaderboard that is currently actvie*/
-  static public void submitScoreToLeaderboard(int score)
-  {
-      if(gpgAvailable){
-      Games.Leaderboards.submitScore(((AppActivity)_self).getGameHelper().getApiClient(),leaderboardIDs[currentID],score);
-      }
-  }
-  
-  static public void requestScoreFromLeaderboard()
-  {
-      if(gpgAvailable){
-          Games.Leaderboards.loadCurrentPlayerLeaderboardScore(((AppActivity)_self).getGameHelper().getApiClient(), leaderboardIDs[currentID], LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC).setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
-              @Override
-              public void onResult(final Leaderboards.LoadPlayerScoreResult scoreResult) {
-                  if (scoreResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_OK) {
-                      AppActivity.currentScore = (int)scoreResult.getScore().getRawScore();
-                      AppActivity.callCppCallback();
-                  }
-              }
-          });
-      }
-  }
-
-  static public int collectScore()
-  {
-      return AppActivity.currentScore;
-  }
-  
-   /*@brief Shows the achievements ui*/
-  static public void showAchievements() {
-      if(gpgAvailable){
-      ((AppActivity)_self).runOnUiThread(new Runnable() {
-          public void run() {
-              ((AppActivity)_self).startActivityForResult(Games.Achievements.getAchievementsIntent(((AppActivity)_self).getGameHelper().getApiClient()), 5);
-          }
-      });
-      }
-  }
-  
-  /*@brief Changes the actvie Achievement
-    @param The index of the achievement in the list*/
-  static public void openAchievement(int achievementID){
-      currentAchievementID = achievementID;
-  }
-  
-  static public void updateAchievement(int percentage){
-      if(gpgAvailable){
-     Games.Achievements.unlock(((AppActivity)_self).getGameHelper().getApiClient(), achievementIDs[currentAchievementID]);
-      }
-  }
-  @Override
-	public boolean onCreateOptionsMenu (Menu menu) {
-		//inflater.inflate(R.layout.menu, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected (MenuItem item) {
-		return true;
-	}
-  
-  static public void exitGame()
-  {
-      Intent intent = new Intent(_self, MainActivity.class);
-      MainActivity.exiting=true;
-      _self.startActivity(intent);
-  }
-  
-		    
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		_self = this;
-		
-		// µ«≥™ ∏∏£∞⁄≥◊
+
 		String leaderboardIdsRaw = "CgkI6cvA3ZgPEAIQAA";
-        
-        leaderboardIDs = leaderboardIdsRaw.split(";");
-		
+
+		leaderboardIDs = leaderboardIdsRaw.split(";");
+
 		// Facebook Initalize
 		FacebookSdk.sdkInitialize(getApplicationContext());
 		callbackManager = CallbackManager.Factory.create();
 
 		shareDialog = new ShareDialog(this);
 		shareDialog.registerCallback(callbackManager, shareCallBack);
+
+		// Admob
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		FrameLayout.LayoutParams adParams = new FrameLayout.LayoutParams(AdView.LayoutParams.WRAP_CONTENT,
+				AdView.LayoutParams.WRAP_CONTENT);
+		adParams.gravity = (Gravity.BOTTOM | Gravity.CENTER);
+
+		adView = new AdView(this);
+		adView.setAdSize(AdSize.SMART_BANNER);
+		adView.setAdUnitId(AD_UNIT_ID);
+
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				.addTestDevice("D123746919D9CCD280CFF5366C919212").build();
+
+		adView.loadAd(adRequest);
+		adView.setBackgroundColor(Color.BLACK);
+		adView.setBackgroundColor(0);
+
+		addContentView(adView, adParams);
+
+		_appActiviy = this;
+
 	}
 
 	/**
 	 * Cocos2d-x JNI Call
 	 * 
-	 * ≥◊¿Ãπˆ ƒ´∆‰ ¿Ãµø
+	 * ÎÑ§Ïù¥Î≤Ñ Ïπ¥Ìéò Ïù¥Îèô
 	 */
 	public static void connectNaverCafe() {
 		new NaverCafe(_self, NAVERAPPID).cafe(NAVERCAFE_URL);
@@ -218,13 +152,16 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	/**
 	 * Cocos2d-x JNI Call
 	 * 
-	 * ∆‰¿ÃΩ∫∫œ ∞¯¿Ø
+	 * ÌéòÏù¥Ïä§Î∂Å Í≥µÏú†
 	 */
 	public static void facebookShare(int score) {
 		if (ShareDialog.canShow(ShareLinkContent.class)) {
 			ShareLinkContent linkContent = new ShareLinkContent.Builder().setContentTitle("Back to the Home")
-					.setContentDescription("Player Acheieve " + score + " score !!! Just play it fast!").setContentUrl(Uri.parse("https://www.facebook.com/SangmoWarrior/?fref=ts"))
-					.setImageUrl(Uri.parse("https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-9/12993399_507392352781589_2310251201340368500_n.jpg?oh=fdf05dd3ce285d84da640c249b6553af&oe=57DEC679")).build();
+					.setContentDescription("Player Acheieve " + score + " score !!! Just play it fast!")
+					.setContentUrl(Uri.parse("https://www.facebook.com/SangmoWarrior/?fref=ts"))
+					.setImageUrl(Uri
+							.parse("https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-9/12993399_507392352781589_2310251201340368500_n.jpg?oh=fdf05dd3ce285d84da640c249b6553af&oe=57DEC679"))
+					.build();
 			shareDialog.show(linkContent);
 		}
 	}
@@ -232,7 +169,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	/**
 	 * Cocos2d-x JNI Call
 	 * 
-	 * ∆‰¿ÃΩ∫∫œ ∑Œ±◊¿Œ ø‰√ª
+	 * ÌéòÏù¥Ïä§Î∂Å Î°úÍ∑∏Ïù∏ ÏöîÏ≤≠
 	 */
 	public static void facebookLogin() {
 		LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -282,7 +219,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	/**
 	 * Cocos2d-x JNI Call
 	 * 
-	 * @return ¿Ø¥œ∆º ±§∞Ì∏¶ Ω√√ª«“ ºˆ ¿÷¥¬¡ˆ ø©∫Œ∏¶ π›»Ø
+	 * @return Ïú†ÎãàÌã∞ Í¥ëÍ≥†Î•º ÏãúÏ≤≠Ìï† Ïàò ÏûàÎäîÏßÄ Ïó¨Î∂ÄÎ•º Î∞òÌôò
 	 */
 	public static boolean unityAdsShowConfirm() {
 		if (UnityAds.canShow() && UnityAds.canShowAds()) {
@@ -292,7 +229,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	}
 
 	/**
-	 * Cocos2d-x JNI Call ¿Ø¥œ∆º ±§∞Ì∏¶ √ ±‚»≠ Ω√≈≤¥Ÿ
+	 * Cocos2d-x JNI Call Ïú†ÎãàÌã∞ Í¥ëÍ≥†Î•º Ï¥àÍ∏∞Ìôî ÏãúÌÇ®Îã§
 	 */
 	public static void unityAdsInit() {
 		UnityAds.setDebugMode(false);
@@ -301,10 +238,202 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	}
 
 	/**
-	 * Cocos2d-x JNI Call ¿Ø¥œ∆º ±§∞Ì∏¶ ¿Áª˝«—¥Ÿ
+	 * Cocos2d-x JNI Call Ïú†ÎãàÌã∞ Í¥ëÍ≥†Î•º Ïû¨ÏÉùÌïúÎã§
 	 */
 	public static void unityAdsPlay() {
 		UnityAds.show();
+	}
+
+	// Admob
+	// Helper get display screen to avoid deprecated function use
+	private Point getDisplaySize(Display d) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			return getDisplaySizeGE11(d);
+		}
+		return getDisplaySizeLT11(d);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private Point getDisplaySizeGE11(Display d) {
+		Point p = new Point(0, 0);
+		d.getSize(p);
+		return p;
+	}
+
+	private Point getDisplaySizeLT11(Display d) {
+		try {
+			Method getWidth = Display.class.getMethod("getWidth", new Class[] {});
+			Method getHeight = Display.class.getMethod("getHeight", new Class[] {});
+			return new Point(((Integer) getWidth.invoke(d, (Object[]) null)).intValue(),
+					((Integer) getHeight.invoke(d, (Object[]) null)).intValue());
+		} catch (NoSuchMethodException e2) // None of these exceptions should
+		// ever occur.
+		{
+			return new Point(-1, -1);
+		} catch (IllegalArgumentException e2) {
+			return new Point(-2, -2);
+		} catch (IllegalAccessException e2) {
+			return new Point(-3, -3);
+		} catch (InvocationTargetException e2) {
+			return new Point(-4, -4);
+		}
+	}
+
+	public static void hideAd() {
+		_appActiviy.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (_appActiviy.adView.isEnabled())
+					_appActiviy.adView.setEnabled(false);
+				if (_appActiviy.adView.getVisibility() != 4)
+					_appActiviy.adView.setVisibility(View.INVISIBLE);
+			}
+		});
+
+	}
+
+	public static void showAd() {
+		_appActiviy.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (!_appActiviy.adView.isEnabled())
+					_appActiviy.adView.setEnabled(true);
+				if (_appActiviy.adView.getVisibility() == 4)
+					_appActiviy.adView.setVisibility(View.VISIBLE);
+			}
+		});
+
+	}
+
+	@Override
+	protected void onPause() {
+		if (adView != null) {
+			adView.pause();
+		}
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
+	}
+
+	// Íµ¨Í∏Ä ÌîåÎ†àÏù¥
+	@Override
+	public void onSignInSucceeded() {
+		Log.d("GPGS", "Î°úÍ∑∏Ïù∏ÏôÑÎ£å ");
+		gpgAvailable = true;
+	}
+
+	@Override
+	public void onSignInFailed() {
+		Log.d("GPGS", "Î°úÍ∑∏Ïù∏Ïã§Ìå® ");
+		gpgAvailable = false;
+	}
+
+	/*
+	 * @brief Changes the actvie leaderboard
+	 * 
+	 * @param The index of the leaderboard
+	 */
+	static public void openLeaderboard(int leaderboardID) {
+		Log.d("GPGS", "Îì§Ïò§ÎÉê ");
+		currentID = leaderboardID;
+		Log.d("GPGS", "Îì§Ïò®Îã§ ");
+	}
+
+	/* @brief This function opens the leaderboards ui for an leaderboard id */
+	static public void openLeaderboardUI() {
+		if (gpgAvailable) {
+			((AppActivity) _self).runOnUiThread(new Runnable() {
+				public void run() {
+					((AppActivity) _self).startActivityForResult(
+							Games.Leaderboards.getLeaderboardIntent(
+									((AppActivity) _self).getGameHelper().getApiClient(), leaderboardIDs[currentID]),
+							2);
+				}
+			});
+		}
+	}
+
+	static public boolean isGPGSupported() {
+		return gpgAvailable;
+	}
+
+	/* @brief Submits a score to the leaderboard that is currently actvie */
+	static public void submitScoreToLeaderboard(int score) {
+		if (gpgAvailable) {
+			Games.Leaderboards.submitScore(((AppActivity) _self).getGameHelper().getApiClient(),
+					leaderboardIDs[currentID], score);
+		}
+	}
+
+	static public void requestScoreFromLeaderboard() {
+		if (gpgAvailable) {
+			Games.Leaderboards
+					.loadCurrentPlayerLeaderboardScore(((AppActivity) _self).getGameHelper().getApiClient(),
+							leaderboardIDs[currentID], LeaderboardVariant.TIME_SPAN_ALL_TIME,
+							LeaderboardVariant.COLLECTION_PUBLIC)
+					.setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+						@Override
+						public void onResult(final Leaderboards.LoadPlayerScoreResult scoreResult) {
+							if (scoreResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_OK) {
+								AppActivity.currentScore = (int) scoreResult.getScore().getRawScore();
+								AppActivity.callCppCallback();
+							}
+						}
+					});
+		}
+	}
+
+	static public int collectScore() {
+		return AppActivity.currentScore;
+	}
+
+	/* @brief Shows the achievements ui */
+	static public void showAchievements() {
+		if (gpgAvailable) {
+			((AppActivity) _self).runOnUiThread(new Runnable() {
+				public void run() {
+					((AppActivity) _self).startActivityForResult(Games.Achievements
+							.getAchievementsIntent(((AppActivity) _self).getGameHelper().getApiClient()), 5);
+				}
+			});
+		}
+	}
+
+	/*
+	 * @brief Changes the actvie Achievement
+	 * 
+	 * @param The index of the achievement in the list
+	 */
+	static public void openAchievement(int achievementID) {
+		currentAchievementID = achievementID;
+	}
+
+	static public void updateAchievement(int percentage) {
+		if (gpgAvailable) {
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// inflater.inflate(R.layout.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return true;
+	}
+
+	static public void exitGame() {
+		Intent intent = new Intent(_self, MainActivity.class);
+		MainActivity.exiting = true;
+		_self.startActivity(intent);
 	}
 
 	// Facebook Callback
@@ -332,6 +461,9 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	// Unity Ads Callback Function
 	public void onResume() {
 		super.onResume();
+		if (adView != null) {
+			adView.resume();
+		}
 		UnityAds.changeActivity(this);
 		UnityAds.setListener(this);
 	}
