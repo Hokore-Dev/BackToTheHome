@@ -12,6 +12,7 @@ public:
 	CC_SYNTHESIZE(bool, sound, Sound);
 	CC_SYNTHESIZE(int, bestScore, BestScore);
 	CC_SYNTHESIZE(int, money, Money);
+	CC_SYNTHESIZE(int, adsCount, AdsCount);
 	CC_SYNTHESIZE(int, backgroundCount, BackgroundCount);
 	CC_SYNTHESIZE(std::string, selectCharacter, SelectCharacter);
 

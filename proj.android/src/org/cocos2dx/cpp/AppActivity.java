@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lettuce.backtothehome.*;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.json.JSONException;
 
@@ -42,6 +43,7 @@ import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
@@ -50,7 +52,6 @@ import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.unity3d.ads.android.IUnityAdsListener;
 import com.unity3d.ads.android.UnityAds;
 
-import android.R;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
@@ -92,6 +93,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	static int currentAchievementID;
 	static boolean gpgAvailable;
 	static String[] leaderboardIDs;
+	static String[] achievementIDs;
 	protected static int currentScore;
 
 	public static native void callCppCallback();
@@ -100,14 +102,23 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	private static AppActivity _appActiviy;
 	private AdView adView;
 	private static final String AD_UNIT_ID = "ca-app-pub-3798516121036315/7737995786";
+	private static InterstitialAd interstital;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		_self = this;
 
-		String leaderboardIdsRaw = "CgkI6cvA3ZgPEAIQAA";
+		String leaderboardIdsRaw = getString(R.string.leaderboard);
+		String achievementIdsRaw = getString(R.string.achievement);
 
 		leaderboardIDs = leaderboardIdsRaw.split(";");
+		achievementIDs = achievementIdsRaw.split(";");
+		
+		GameHelper gameHelper = new GameHelper(this, GameHelper.CLIENT_ALL);
+		gameHelper.setup(this);
+
+		gameHelper.enableDebugLog(true);   // add this (but only for debug builds)
+		 
 
 		// Facebook Initalize
 		FacebookSdk.sdkInitialize(getApplicationContext());
@@ -127,8 +138,10 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 		adView.setAdSize(AdSize.SMART_BANNER);
 		adView.setAdUnitId(AD_UNIT_ID);
 
-		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-				.addTestDevice("D123746919D9CCD280CFF5366C919212").build();
+		AdRequest adRequest = new AdRequest.Builder().
+				// addTestDevice(AdRequest.DEVICE_ID_EMULATOR).
+				// addTestDevice("D123746919D9CCD280CFF5366C919212").
+		build();
 
 		adView.loadAd(adRequest);
 		adView.setBackgroundColor(Color.BLACK);
@@ -138,6 +151,17 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 
 		_appActiviy = this;
 
+		loadInterstital();
+	}
+
+	private void loadInterstital() {
+		// Admob Screen Ads
+		Log.d("ADMOB", "Load");
+		interstital = new InterstitialAd(this);
+		interstital.setAdUnitId("ca-app-pub-3798516121036315/3100816587");
+
+		AdRequest screenRequest = new AdRequest.Builder().build();
+		interstital.loadAd(screenRequest);
 	}
 
 	/**
@@ -146,7 +170,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	 * 네이버 카페 이동
 	 */
 	public static void connectNaverCafe() {
-		new NaverCafe(_self, NAVERAPPID).cafe(NAVERCAFE_URL);
+		// new NaverCafe(_self, NAVERAPPID).cafe(NAVERCAFE_URL);
 	}
 
 	/**
@@ -158,12 +182,37 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 		if (ShareDialog.canShow(ShareLinkContent.class)) {
 			ShareLinkContent linkContent = new ShareLinkContent.Builder().setContentTitle("Back to the Home")
 					.setContentDescription("Player Acheieve " + score + " score !!! Just play it fast!")
-					.setContentUrl(Uri.parse("https://www.facebook.com/SangmoWarrior/?fref=ts"))
+					.setContentUrl(Uri.parse("https://www.facebook.com/gamebacktothehome/?fref=ts"))
 					.setImageUrl(Uri
-							.parse("https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-9/12993399_507392352781589_2310251201340368500_n.jpg?oh=fdf05dd3ce285d84da640c249b6553af&oe=57DEC679"))
+							.parse("https://scontent.xx.fbcdn.net/v/t1.0-9/13230343_627209070762979_5685993308336261558_n.png?oh=7c001af3d6fc022406268c5bd5a4d964&oe=57DC1BAF"))
 					.build();
 			shareDialog.show(linkContent);
 		}
+	}
+
+	/**
+	 * Cocos2d-x JNI Call
+	 * 
+	 * Admob 전면 광고
+	 */
+	public static void showAdmobScreenAds() {
+		_self.showInterstital();
+	}
+
+	public void showInterstital() {
+		Log.d("ADMOB", "Hello");
+		runOnUiThread(new Runnable() {
+			public void run() {
+
+				if (interstital.isLoaded()) {
+
+					Log.d("ADMOB", "ShowShow");
+					interstital.show();
+				} else {
+					Log.d("ADMOB", "NotYet");
+				}
+			}
+		});
 	}
 
 	/**
@@ -222,6 +271,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	 * @return 유니티 광고를 시청할 수 있는지 여부를 반환
 	 */
 	public static boolean unityAdsShowConfirm() {
+
 		if (UnityAds.canShow() && UnityAds.canShowAds()) {
 			return true;
 		}
@@ -322,6 +372,7 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 	}
 
 	// 구글 플레이
+
 	@Override
 	public void onSignInSucceeded() {
 		Log.d("GPGS", "로그인완료 ");
@@ -416,18 +467,9 @@ public class AppActivity extends BaseGameActivity implements IUnityAdsListener {
 
 	static public void updateAchievement(int percentage) {
 		if (gpgAvailable) {
+			Games.Achievements.unlock(((AppActivity) _self).getGameHelper().getApiClient(),
+					achievementIDs[currentAchievementID]);
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// inflater.inflate(R.layout.menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return true;
 	}
 
 	static public void exitGame() {

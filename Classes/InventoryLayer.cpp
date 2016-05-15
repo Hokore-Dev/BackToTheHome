@@ -154,7 +154,7 @@ bool InventoryLayer::init()
 	characterView->setContentSize(Size(550, 900));
 	characterView->setScrollBarPositionFromCorner(Vec2(15, 0));
 	characterView->setBounceEnabled(true);
-	characterView->setPosition(Vec2(100,200));
+	characterView->setPosition(Vec2(100,280));
 	this->addChild(characterView);
 	
 	Menu* backMenu = Menu::create();
@@ -164,7 +164,7 @@ bool InventoryLayer::init()
 		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 		this->removeFromParentAndCleanup(true);
 	}));
-	back->setPosition(size.width / 2, 100);
+	back->setPosition(size.width / 2, size.height / 2 - 420);
 	backMenu->addChild(back);
 	this->addChild(backMenu);
 

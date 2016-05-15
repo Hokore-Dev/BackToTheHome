@@ -102,22 +102,22 @@ bool GameScene::init()
 	this->addChild(bestScore, 5);
 
 	clearMessage = Sprite::create("Texture/clearMessage.png");
-	clearMessage->setPosition(size.width / 2, size.height / 6 + 30 );
+	clearMessage->setPosition(size.width / 2, size.height / 6 + 110 );
 	clearMessage->setOpacity(0);
 	this->addChild(clearMessage,5);
 
 	ranking = Sprite::create("Texture/ranking.png");
-	ranking->setPosition(size.width / 2 + 160, (size.height / 6) - 100);
+	ranking->setPosition(size.width / 2 + 160, (size.height / 6) - 20);
 	ranking->setOpacity(0);
 	this->addChild(ranking, 5);
 
 	share = Sprite::create("Texture/share.png");
-	share->setPosition(size.width / 2 - 160, (size.height / 6) - 100);
+	share->setPosition(size.width / 2 - 160, (size.height / 6) - 20);
 	share->setOpacity(0);
 	this->addChild(share, 5);
 
 	moneyUp = Sprite::create("Texture/moneyup.png");
-	moneyUp->setPosition(size.width / 2, (size.height / 6) - 100);
+	moneyUp->setPosition(size.width / 2, (size.height / 6) - 20);
 	moneyUp->setOpacity(0);
 	this->addChild(moneyUp, 5);
 
@@ -131,6 +131,7 @@ bool GameScene::init()
 
 void GameScene::gameResultShow()
 {
+
 	GameSharing::SubmitScore(score, 0);
 	if (UserData::getInstance()->getBestScore() < score)
 	{
@@ -176,6 +177,23 @@ void GameScene::gameResultShow()
 		DelayTime::create(0.7f),
 		CallFunc::create(std::bind([&]{
 		gameover = true;
+
+		UserData::getInstance()->setAdsCount(UserData::getInstance()->getAdsCount() + 1);
+		if (UserData::getInstance()->getAdsCount() == 3)
+		{
+			UserData::getInstance()->setAdsCount(0);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			JniMethodInfo t;
+			if (JniHelper::getStaticMethodInfo(t,
+				"org/cocos2dx/cpp/AppActivity",
+				"showAdmobScreenAds",
+				"()V"))
+			{
+				t.env->CallStaticVoidMethod(t.classID, t.methodID);
+			}
+#endif
+		}
+		UserDefault::getInstance()->setIntegerForKey("AdsCount", UserData::getInstance()->getAdsCount());
 	})), nullptr));
 }
 
@@ -244,7 +262,7 @@ void GameScene::update(float delta)
 	ballCreateDelta += delta;
 	levelDelta		+= delta;
 
-	levelBallCount = level * LEVEL_BALL_RANGE;
+	levelBallCount = 1 + level * LEVEL_BALL_RANGE;
 	if (ballCreateDelta > BALL_CREATE_TIME)
 	{
 		ballCreateDelta = 0;

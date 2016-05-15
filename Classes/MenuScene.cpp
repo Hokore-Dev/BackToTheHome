@@ -93,7 +93,7 @@ bool MenuScene::init()
 			sound->setNormalImage(Sprite::create("Texture/unsound.png"));
 		}
 	}));
-	sound->setPosition(size.width / 2 - 200, size.height / 2 - 500 - 500);
+	sound->setPosition(size.width / 2 - 200, size.height / 2 - 420 - 500);
 	menu->addChild(sound);
 
 	if (UserData::getInstance()->getSound())
@@ -116,7 +116,7 @@ bool MenuScene::init()
 		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 		this->addChild(InventoryLayer::create());
 	}));
-	store->setPosition(size.width / 2, size.height / 2 - 500 - 500);
+	store->setPosition(size.width / 2, size.height / 2 - 420 - 500);
 	menu->addChild(store);
 
 	ranking = MenuItemImage::create("Texture/ranking.png",
@@ -124,7 +124,7 @@ bool MenuScene::init()
 		SimpleAudioEngine::getInstance()->playEffect("Sound/touch.wav");
 		GameSharing::ShowLeaderboards(0);
 	}));
-	ranking->setPosition(size.width / 2 + 200, size.height / 2 - 500 - 500);
+	ranking->setPosition(size.width / 2 + 200, size.height / 2 - 420 - 500);
 	menu->addChild(ranking);
 
 	this->addChild(menu);
@@ -145,11 +145,18 @@ bool MenuScene::init()
 
 	exitMessage = Sprite::create("Texture/exitMessage.png");
 	exitMessage->setOpacity(0);
-	exitMessage->setPosition(size.width / 2, 300);
+	exitMessage->setPosition(size.width / 2, size.height - 100);
 	this->addChild(exitMessage,5);
 
 	initAnimation();
+
+	scheduleUpdate();
 	return true;
+}
+
+void MenuScene::update(float delta)
+{
+	lbUserMoney->setString(StringUtils::toString(UserData::getInstance()->getMoney()));
 }
 
 void MenuScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode,

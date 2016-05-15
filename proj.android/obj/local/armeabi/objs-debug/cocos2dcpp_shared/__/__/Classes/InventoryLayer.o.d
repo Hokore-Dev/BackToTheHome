@@ -8,7 +8,7 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/InventoryLayer.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccConfig.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCPlatformDefine.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCPlatformDefine-android.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/android/log.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/log.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCDirector.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/stack \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/thread \
@@ -16,17 +16,17 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/InventoryLayer.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCVector.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccMacros.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCConsole.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/sys/select.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/select.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/mutex \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCStdC.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCStdC-android.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/math.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/stdlib.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/alloca.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/strings.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/memory.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/math.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/stdlib.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/alloca.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/strings.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/memory.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/cassert \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccRandom.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/random \
@@ -54,10 +54,10 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/InventoryLayer.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../math/Quaternion.inl \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCGL.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCGL-android.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2platform.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2ext.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../renderer/CCTexture2D.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCScriptSupport.h \
@@ -75,7 +75,7 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/InventoryLayer.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCScheduler.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/set \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/uthash.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/inttypes.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/inttypes.h \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/queue \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/condition_variable \
  C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/future \
@@ -117,8 +117,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/InventoryLayer.o: \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ZipUtils.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCFileUtils-android.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCFileUtils.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/jni.h \
- C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/android/asset_manager.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/jni.h \
+ C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/asset_manager.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/base64.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccMacros.h \
  C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccTypes.h \
@@ -405,7 +405,7 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCPla
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCPlatformDefine-android.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/android/log.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/log.h:
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCDirector.h:
 
@@ -421,7 +421,7 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/ccMacros.
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/CCConsole.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/sys/select.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/select.h:
 
 C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
@@ -433,15 +433,15 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCStd
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCStdC-android.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/math.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/math.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/stdlib.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/stdlib.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/alloca.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/alloca.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/strings.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/strings.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/memory.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/memory.h:
 
 C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/cassert:
 
@@ -497,13 +497,13 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCGL.
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/android/CCGL-android.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2platform.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2platform.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/KHR/khrplatform.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/GLES2/gl2ext.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/GLES2/gl2ext.h:
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../renderer/CCTexture2D.h:
 
@@ -539,7 +539,7 @@ C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/set:
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/uthash.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/inttypes.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/inttypes.h:
 
 C:/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.8/include/queue:
 
@@ -623,9 +623,9 @@ C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/andro
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../platform/CCFileUtils.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/jni.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/jni.h:
 
-C:/android-ndk-r10b/platforms/android-15/arch-arm/usr/include/android/asset_manager.h:
+C:/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/asset_manager.h:
 
 C:\Documents\Back_to_the_Home\proj.android\../cocos2d/cocos/3d/../base/base64.h:
 

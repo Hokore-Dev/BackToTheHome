@@ -15,7 +15,8 @@ public:
 	virtual bool init();
 	CREATE_FUNC(MenuScene);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
-	
+	void update(float delta);
+
 private:
 	void initAnimation();
 	void destroyAnimation();

@@ -19,8 +19,10 @@ void UserData::init()
 		UserDefault::getInstance()->setBoolForKey("Sound", true);
 		UserDefault::getInstance()->setBoolForKey("Tutorial", true);
 		UserDefault::getInstance()->setIntegerForKey("BestScore", 0);
+		UserDefault::getInstance()->setIntegerForKey("AdsCount", 0);
 		CharacterDataInit();
 	}
+	adsCount = UserDefault::getInstance()->getIntegerForKey("AdsCount");
 	bestScore = UserDefault::getInstance()->getIntegerForKey("BestScore");
 	money = UserDefault::getInstance()->getIntegerForKey("Money");
 	tutorial = UserDefault::getInstance()->getBoolForKey("Tutorial");

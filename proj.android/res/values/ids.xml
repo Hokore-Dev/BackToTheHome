@@ -7,4 +7,5 @@ Save this file as res/values/games-ids.xml in your project.
   <string name="app_id">522034619881</string>
   <string name="package_name">com.lettuce.backtothehome</string>
   <string name="leaderboard">CgkI6cvA3ZgPEAIQAA</string>
+  <string name="achievement">CgkI6cvA3ZgPEAIQAw;CgkI6cvA3ZgPEAIQBA;CgkI6cvA3ZgPEAIQBQ;CgkI6cvA3ZgPEAIQBg;CgkI6cvA3ZgPEAIQBw;CgkI6cvA3ZgPEAIQDQ;</string>
 </resources>

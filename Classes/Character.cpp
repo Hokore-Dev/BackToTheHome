@@ -25,8 +25,8 @@ bool Character::init(DIRECTION direction_)
 	{
 		return false;
 	}
-	if (money) this->setScale(1.6f);
-	else this->setScale(1.5f);
+	if (money) this->setScale(1.5f);
+	else this->setScale(1.4f);
 
 	this->direction = direction_;
 	this->setOpacity(180);
